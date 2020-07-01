@@ -15,7 +15,7 @@ void delay(void){
 int main(void)
 {
 
-	// 1. Set the PA 5 configurations
+	// 1. Set the PC 0 configurations
 
 	GPIO_Handle_t GpioLed;
 
