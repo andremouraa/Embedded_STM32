@@ -1,0 +1,173 @@
+/*
+ * stm32f446xx_spi_driver.c
+ *
+ *  Created on: Jul 06, 2020
+ *      Author: Andre Moura
+ */
+
+#include "stm32f446xx.h"
+
+// Clock Setup
+
+/****************************************************
+ * @fn				- SPI_PeriClockControl
+ *
+ * @brief			- This function enables or disables peripheral clock for the given SPI bus
+ *
+ * @param[in] 		- Base address of the SPI peripheral
+ * @param[in]		- ENABLE or DISABLE macros
+ * @param[in]		-
+ *
+ * @return			-
+ *
+ * @note			-
+ *
+ */
+
+void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi)
+{
+	if (EnorDi == ENABLE){
+		if (pSPIx == SPI1)
+		{
+			SPI1_PCLK_EN();
+		} else if (pSPIx == SPI2)
+		{
+			SPI2_PCLK_EN();
+		} else if (pSPIx == SPI3)
+		{
+			SPI3_PCLK_EN();
+		} else if (pSPIx == SPI4)
+		{
+			SPI4_PCLK_EN();
+		}
+	} else {
+		if (pSPIx == SPI1)
+		{
+			SPI1_PCLK_DI();
+		} else if (pSPIx == SPI2)
+		{
+			SPI2_PCLK_DI();
+		} else if (pSPIx == SPI3)
+		{
+			SPI3_PCLK_DI();
+		} else if (pSPIx == SPI4)
+		{
+			SPI4_PCLK_DI();
+		}
+	}
+};
+
+
+// Init and De-Init
+
+/****************************************************
+ * @fn				- SPI_Init
+ *
+ * @brief			- This function initialize the given SPI bus and set the needed parameters
+ *
+ * @param[in] 		- The Struct SPI_Handle
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @note			- none
+ *
+ */
+
+void SPI_Init(SPI_Handle_t *pSPIHandle)
+{
+
+	// 1. Select if the device is master or slave
+		pSPIHandle->pSPIx->CR1 &= ~(1 << 2); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_DeviceMode << 2); //Set the option
+/*
+	// 2. Select the configuration (Simplex, HalfDuplex and Duplex)
+		temp = *pSPIHandle->SPIConfig.SPI_DeviceMode;
+		if(*pSPIHandle->SPIConfig.SPI_DeviceMode == SPI_BUS_SIMPLEX){
+			*pSPIHandle->pSPIx->CR1 &= ~(1 << 15);
+			*pSPIHandle->SPIConfig.SPI_DeviceMode;
+
+
+		};
+*/
+	// 3. Set the length of the data frame
+		pSPIHandle->pSPIx->CR1 &= ~(1 << 11); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_DFF << 11); //Set the length
+
+	// 4. Configure the CPOL
+		pSPIHandle->pSPIx->CR1 &= ~(1 << 1); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_CPOL << 1); //Set the polarity
+
+	// 5. Configure the CPHA
+		pSPIHandle->pSPIx->CR1 &= ~(1 << 0); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_CPHA << 0); //Set the phase
+
+	// 6. Select the Baud Rate
+		pSPIHandle->pSPIx->CR1 &= ~(7 << 3); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_SlckSpeed << 3); //Set the baud rate
+
+	// 7. Set the SSM
+		pSPIHandle->pSPIx->CR1 &= ~(1 << 9); //Clear
+		pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SPI_SSM << 9); //Set the baud rate
+
+};
+
+/****************************************************
+ * @fn				- GPIO_DeInit
+ *
+ * @brief			- This function reset all the registers of a SPI bus
+ *
+ * @param[in] 		- Base address of the SPI peripheral
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return			- none
+ *
+ * @note			- none
+ *
+ */
+
+
+
+
+
+void SPI_DeInit(SPI_RegDef_t *pSPIx);
+
+/****************************************************
+ * @fn				- SPI_SendData
+ *
+ * @brief			- This function sends data through SPI bus
+ *
+ * @param[in] 		- Base address of the SPI peripheral
+ * @param[in]		- Base address of the SPI Transmitter Buffer
+ * @param[in]		- The length of the data
+ *
+ * @return			- none
+ *
+ * @note			- none
+ *
+ */
+
+void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+
+/****************************************************
+ * @fn				- SPI_SendData
+ *
+ * @brief			- This function receives data through SPI bus
+ *
+ * @param[in] 		- Base address of the SPI peripheral
+ * @param[in]		- Base address of the SPI Receiver Buffer
+ * @param[in]		- The length of the data
+ *
+ * @return			- none
+ *
+ * @note			- none
+ *
+ */
+
+void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len);
+
+
+
+

@@ -148,6 +148,8 @@
 
 /**************** PERIPHERAL REGISTER DEFINITION STRUCTURES ****************/
 
+
+// GPIO Registers Definition
 typedef struct
 {
 	__vo uint32_t MODER;			//Mode Register
@@ -161,6 +163,8 @@ typedef struct
 	__vo uint32_t AFR[2];			//Alternate Function Register
 
 } GPIO_RegDef_t;
+
+//RCC Registers Definition
 
 typedef struct
 {
@@ -211,6 +215,8 @@ typedef struct
 
 }RCC_RegDef_t;
 
+//EXTI Registers Definition
+
 typedef struct{
 	__vo uint32_t IMR;				//Interrupt mask register
 	__vo uint32_t EMR;				//Event mask register
@@ -220,6 +226,8 @@ typedef struct{
 	__vo uint32_t PR;				//Pending register
 
 }EXTI_RegDef_t;
+
+//System Configuration Registers Definition
 
 typedef struct{
 	__vo uint32_t MEMRMP;			//Memory remap register
@@ -232,6 +240,20 @@ typedef struct{
 
 }SYSCFG_RegDef_t;
 
+//SPI Registers Definition
+
+typedef struct {
+	__vo uint32_t CR1;
+	__vo uint32_t CR2;
+	__vo uint32_t SR;
+	__vo uint32_t DR;
+	__vo uint32_t CRCPR;
+	__vo uint32_t RXCRCR;
+	__vo uint32_t TXCRCR;
+	__vo uint32_t I2SCFGR;
+	__vo uint32_t I2SPR;
+
+}SPI_RegDef_t;
 
 /*
  * Peripheral Definitions
@@ -246,60 +268,15 @@ typedef struct{
 #define GPIOG ((GPIO_RegDef_t*)GPIOG_BASEADDR)
 #define GPIOH ((GPIO_RegDef_t*)RCC_BASEADDR)
 
-
+#define SPI1 ((SPI_RegDef_t*)SPI1_BASEADDR)
+#define SPI2 ((SPI_RegDef_t*)SPI2_BASEADDR)
+#define SPI3 ((SPI_RegDef_t*)SPI3_BASEADDR)
+#define SPI4 ((SPI_RegDef_t*)SPI4_BASEADDR)
 
 #define RCC ((RCC_RegDef_t*)RCC_BASEADDR)
 #define EXTI ((EXTI_RegDef_t*)EXTI_BASEADDR)
 #define SYSCFG ((SYSCFG_RegDef_t*)SYSCFG_BASEADDR)
 
-/*
- * Clock Enable Macros for GPIOx peripherals
- */
-
-#define GPIOA_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 0) )
-#define GPIOB_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 1) )
-#define GPIOC_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 2) )
-#define GPIOD_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 3) )
-#define GPIOE_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 4) )
-#define GPIOF_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 5) )
-#define GPIOG_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 6) )
-#define GPIOH_PCLK_EN()  ( RCC->AHB1ENR |= (1 << 7) )
-
-/*
- * Clock Enable Macros for I2Cx peripherals
- */
-
-#define I2C1_PCLK_EN()  ( RCC->APB1ENR |= (1 << 21) )
-#define I2C2_PCLK_EN()  ( RCC->APB1ENR |= (1 << 22) )
-#define I2C3_PCLK_EN()  ( RCC->APB1ENR |= (1 << 23) )
-
-/*
- * Clock Enable Macros for SPIx peripherals
- */
-
-#define SPI1_PCLK_EN()  ( RCC->APB2ENR |= (1 << 12) )
-#define SPI4_PCLK_EN()  ( RCC->APB2ENR |= (1 << 13) )
-#define SPI2_PCLK_EN()  ( RCC->APB1ENR |= (1 << 14) )
-#define SPI3_PCLK_EN()  ( RCC->APB1ENR |= (1 << 15) )
-
-
-/*
- * Clock Enable Macros for USARTx peripherals
- */
-
-#define USART2_PCLK_EN()  ( RCC->APB1ENR |= (1 << 17) )
-#define USART3_PCLK_EN()  ( RCC->APB1ENR |= (1 << 18) )
-#define UART4_PCLK_EN()  ( RCC->APB1ENR |= (1 << 19) )
-#define UART5_PCLK_EN()  ( RCC->APB1ENR |= (1 << 20) )
-
-#define USART1_PCLK_EN()  ( RCC->APB2ENR |= (1 << 4) )
-#define USART6_PCLK_EN()  ( RCC->APB2ENR |= (1 << 5) )
-
-/*
- * Clock Enable Macros for SYSCFG peripheral
- */
-
-#define SYSCFG_PCLK_EN()  ( RCC->APB2ENR |= (1 << 14) )
 
 
 /*
@@ -350,7 +327,6 @@ typedef struct{
  */
 
 #define SYSCFG_PCLK_EN()  ( RCC->APB2ENR |= (1 << 14) )
-
 
 
 /*
@@ -476,5 +452,6 @@ typedef struct{
 
 
 #include "stm32f446xx_gpio_driver.h"
+#include "stm32f446xx_spi_driver.h"
 
 #endif /* INC_STM32F446XX_H_ */
